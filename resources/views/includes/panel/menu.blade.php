@@ -6,50 +6,8 @@
     @endif
 </h6>
 <ul class="navbar-nav">
-    @if(auth()->user()->role=='admin')
-        <li class="nav-item">
-            <a class="nav-link" href="/home">
-                <i class="ni ni-tv-2 text-primary"></i> Dashboard
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/specialties">
-                <i class="ni ni-button-play text-blue"></i>Especialidades
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/doctors">
-                <i class="ni ni-button-play text-orange"></i>Medicos
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/patients">
-                <i class="ni ni-button-play text-yellow"></i>Pacientes
-            </a>
-        </li>
-    @elseif (auth()->user()->role=='doctor')
-        <li class="nav-item">
-            <a class="nav-link" href="/schedule">
-                <i class="ni ni-calendar-grid-58 text-blue"></i>Gestionar horario
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/patients">
-                <i class="ni ni-time-alarm text-yellow"></i>Mis pacientes
-            </a>
-        </li>
-    @else {{-- patients --}}
-    <li class="nav-item">
-        <a class="nav-link" href="/specialties">
-            <i class="ni ni-send text-blue"></i>Reservar Citas
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="/specialties">
-            <i class="ni ni-timq text-blue"></i>Mis citas
-        </a>
-    </li>
-    @endif
+    @include('includes.panel.menu.'.auth()->user()->role)
+
     <li class="nav-item">
         <a class="nav-link" href="{{route('logout')}}"
            onclick="event.preventDefault(); document.getElementById('FormLogout').submit() ">
@@ -70,13 +28,13 @@
     <ul class="navbar-nav mb-md-3">
         <li class="nav-item">
             <a class="nav-link"
-               href="#">
+               href="{{url('/charts/appointments/line')}}">
                 <i class="ni ni-button-play"></i> Frecuencias de Citas
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link"
-               href="#">
+               href="{{url('/charts/doctors/column')}}">
                 <i class="ni ni-button-play"></i> Medicos Activos
             </a>
         </li>

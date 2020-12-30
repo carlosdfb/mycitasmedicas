@@ -18,12 +18,24 @@ class UserSeeder extends Seeder
             'email' => 'admin@gmail.com',
             'email_verified_at' => now(),
             'password' => bcrypt('1234'), // password
-            'dni'=>'12345678' ,
-            'adress'=> 'caracas',
-            'phone'=> '04125150853',
             'role'=> 'admin'
         ]);
-        $users = factory(App\User::class, 40)
+        User::create([
+            'name' => 'Paciente 1',
+            'email' => 'paciente1@gmail.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('1234'), // password
+            'role'=> 'patient'
+        ]);
+        User::create([
+            'name' => 'Medico 1',
+            'email' => 'doctor@gmail.com',
+            'email_verified_at' => now(),
+            'password' => bcrypt('1234'), // password
+            'role'=> 'doctor'
+        ]);
+        factory(User::class, 50)
+            ->state('patient')
             ->create();
     }
 }

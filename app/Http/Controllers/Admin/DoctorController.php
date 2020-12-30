@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\specialty;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -28,7 +29,8 @@ class DoctorController extends Controller
      */
     public function create()
     {
-        return view('doctors.create');
+        $specialties = specialty::all();
+        return view('doctors.create', compact('specialties'));
     }
 
     /**
@@ -39,6 +41,7 @@ class DoctorController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $rules = [
             'name' => 'required|min:3',
             'email' => 'required|email',
@@ -47,12 +50,14 @@ class DoctorController extends Controller
             'phone' => 'min:6',
         ];
         $this->validate($request, $rules);
-        User::create($request->only('name', 'email', 'dni', 'adress', 'phone')
+        $user = User::create($request->only('name', 'email', 'dni', 'adress', 'phone')
             + [
                 'role' => 'doctor',
                 'password' => bcrypt($request->input('password'))
             ]
         );
+
+        $user->specialties()->attach($request->input('specialties'));
         $notification = 'Doctor creado satisfactoriamente';
         return redirect('/doctors')->with(compact('notification'));
     }
@@ -78,7 +83,9 @@ class DoctorController extends Controller
 
     {
         $doctor = User::doctors()->findOrFail($id);
-        return view('doctors.edit', compact('doctor'));
+        $specialties = specialty::all();
+        $specialty_ids = $doctor->specialties()->pluck('specialties.id');
+        return view('doctors.edit', compact('doctor', 'specialties', 'specialty_ids'));
     }
 
     /**
@@ -98,14 +105,20 @@ class DoctorController extends Controller
             'phone' => 'min:6',
         ];
         $this->validate($request, $rules);
+        // encontrar al usuari
         $user = User::doctors()->findOrFail($id);
-        $doctorName =  $user->name;
+        $doctorName = $user->name;
+
+        // obtenemos la data del formulario
         $data = $request->only('name', 'email', 'dni', 'adress', 'phone');
         $password = $request->input('password');
         if ($password)
             $data['password'] = bcrypt($password);
         $user->fill($data);
-        $user->save();
+        $user->save(); // update la inforacion basica
+
+        $user->specialties()->sync($request->input('specialties'));
+
         $notification = "Doctor $doctorName actualizado satisfactoriamente";
         return redirect('/doctors')->with(compact('notification'));
     }

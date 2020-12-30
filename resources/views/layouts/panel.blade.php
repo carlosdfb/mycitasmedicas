@@ -16,6 +16,7 @@
     <link href="{{asset('vendor/@fortawesome/fontawesome-free/css/all.min.css')}}" rel="stylesheet">
     <!-- Argon CSS -->
     <link type="text/css" href="{{asset('css/argon.css?v=1.0.0')}}" rel="stylesheet">
+    @yield ('styles')
 </head>
 
 <body>
@@ -28,7 +29,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <!-- Brand -->
-        <a class="navbar-brand pt-0" href="./index.html">
+        <a class="navbar-brand pt-0" href="/">
             <img src="{{asset('img/brand/blue.png')}}" class="navbar-brand-img" alt="...">
         </a>
         <!-- User -->
@@ -153,6 +154,7 @@
 <!-- Optional JS -->
 <script src="{{asset('vendor/chart.js/dist/Chart.min.js')}}"></script>
 <script src="{{asset('vendor/chart.js/dist/Chart.extension.js')}}"></script>
+@yield('scripts')
 <!-- Argon JS -->
 <script src="{{asset('js/argon.js?v=1.0.0')}}"></script>
 </body>
